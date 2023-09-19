@@ -1,0 +1,68 @@
+"""
+Created on Tue Aug 23
+
+@author: Maghi Haidar
+"""
+
+
+import tkinter as tk
+from tkinter import messagebox
+
+class ToDoListApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("To-Do List App")
+        
+        self.tasks = []
+
+        self.task_entry = tk.Entry(root, font=("Helvetica", 14))
+        self.task_entry.pack(pady=10)
+
+        self.add_button = tk.Button(root, text="Add Task", command=self.add_task)
+        self.add_button.pack()
+
+        self.task_listbox = tk.Listbox(root, font=("Helvetica", 14), selectmode=tk.SINGLE)
+        self.task_listbox.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+
+        self.complete_button = tk.Button(root, text="Mark Completed", command=self.mark_completed)
+        self.complete_button.pack()
+
+        self.delete_button = tk.Button(root, text="Delete Task", command=self.delete_task)
+        self.delete_button.pack()
+
+        self.load_tasks()
+
+    def load_tasks(self):
+        self.task_listbox.delete(0, tk.END)
+        for task in self.tasks:
+            self.task_listbox.insert(tk.END, task)
+
+    def add_task(self):
+        task = self.task_entry.get()
+        if task:
+            self.tasks.append(task)
+            self.task_entry.delete(0, tk.END)
+            self.load_tasks()
+
+    def mark_completed(self):
+        selected_index = self.task_listbox.curselection()
+        if selected_index:
+            index = selected_index[0]
+            self.tasks.pop(index)
+            self.load_tasks()
+        else:
+            messagebox.showinfo("Error", "No task selected!")
+
+    def delete_task(self):
+        selected_index = self.task_listbox.curselection()
+        if selected_index:
+            index = selected_index[0]
+            self.tasks.pop(index)
+            self.load_tasks()
+        else:
+            messagebox.showinfo("Error", "No task selected!")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ToDoListApp(root)
+    root.mainloop()
